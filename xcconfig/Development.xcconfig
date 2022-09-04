@@ -1,0 +1,7 @@
+// Development Build Configuration
+//
+
+ENVIRONMENT = Development
+
+// Sentry
+SENTRY_DSN = https:/$()/e6c385eadc8d42d2bf695a50c5599d13@o1393476.ingest.sentry.io/6715006
