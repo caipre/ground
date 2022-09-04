@@ -17,23 +17,48 @@ let infoPlist: [String: InfoPlist.Value] = [
   "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
 ]
 
+let configs: [Configuration] = [
+  .debug(name: "Development", xcconfig: "xcconfig/Development.xcconfig"),
+  .debug(name: "TestFlight", xcconfig: "xcconfig/TestFlight.xcconfig"),
+  .release(name: "Production", xcconfig: "xcconfig/Production.xcconfig"),
+]
+
+// TODO: Read keys from xcconfig files
+let configKeys = [
+  "ENVIRONMENT",
+  "SENTRY_DSN",
+]
+let configPlist: [String: InfoPlist.Value] = Dictionary(
+  uniqueKeysWithValues: configKeys.map { configKey in
+    let plistValue = InfoPlist.Value.string("$(\(configKey))")
+    return (configKey, plistValue)
+  })
+
+let mergedPlist = infoPlist.merging(configPlist, uniquingKeysWith: { a, b in b })
+
 let project = Project(
   name: "ground",
-  packages: [],
-  settings: .settings(base: base),
+  packages: [
+    .package(url: "https://github.com/getsentry/sentry-cocoa", from: "7.24.0")
+  ],
+  settings: .settings(base: base, configurations: configs),
   targets: [
     Target(
       name: "App",
       platform: .iOS,
       product: .app,
       bundleId: "co.nickp.ground",
-      infoPlist: .extendingDefault(with: infoPlist),
+      infoPlist: .extendingDefault(with: mergedPlist),
       sources: ["App/Sources/**"],
-      resources: ["App/Resources/**"]
+      resources: ["App/Resources/**"],
+      dependencies: [
+        .package(product: "Sentry")
+      ]
     )
   ],
   additionalFiles: [
     "**/README.md",
+    "xcconfig/*.xcconfig",
     "Project.swift",
   ]
 )
