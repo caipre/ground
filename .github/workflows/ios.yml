@@ -1,0 +1,29 @@
+name: Build App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build default scheme
+    runs-on: macos-12
+
+    steps:
+    - name: Prepare Xcode
+      run: |
+        # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md#xcode
+        sudo xcode-select --switch /Applications/Xcode_13.4.1.app
+
+    - name: Fetch sources
+      uses: actions/checkout@v2
+
+    - name: Install Tuist
+      run: |
+        bash <(curl -Ls https://install.tuist.io)
+
+    - name: Build App
+      run: |
+        tuist build App
