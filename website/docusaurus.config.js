@@ -9,7 +9,7 @@ const config = {
   title: 'ground',
   tagline: 'Track progress on the Groundhandling Challenge',
   url: 'https://caipre.github.com/',
-  baseUrl: '/',
+  baseUrl: '/ground/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
