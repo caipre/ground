@@ -1,3 +1,7 @@
+---
+id: template
+---
+
 # Template for Decision Records
 
 ## Prologue
